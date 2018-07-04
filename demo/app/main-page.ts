@@ -190,7 +190,6 @@ export function addLine(args: observable.EventData) {
 		circleRadius: 4
 	};
 	i++;
-	line.addLine(lineData2);
 	graph1.addLine(lineData2);
 }
 

@@ -1,10 +1,10 @@
 <Page xmlns="http://schemas.nativescript.org/tns.xsd" loaded="pageLoaded" xmlns:LineChart="nativescript-charts/line-chart">
     <ScrollView>
-      <StackLayout>
+      <StackLayout class="p-y-20">
         <StackLayout id="lay" class="graph">
         </StackLayout>
         <StackLayout class="graph two">
-          <LineChart:LineChart id="graph1" chartSettings="{{chartSettings}}" chartData="{{chartData}}"/> 
+          <LineChart:LineChart class="graph" id="graph1" chartSettings="{{chartSettings}}" chartData="{{chartData}}"/> 
         </StackLayout>
         <StackLayout orientation="horizontal">
           <Button text="clearData" tap="clearData"></Button>
