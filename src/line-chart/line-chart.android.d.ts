@@ -1,4 +1,4 @@
-import { ILineSeries, IPoint, LegendForm, LegendHorizontalAlignment, LegendVerticalAlignment, ILineChart, XPosition, YPosition, Axis, XAxis, RightYAxis, LeftYAxis, LineChartCommon } from "./line-chart.common";
+import { ILineSeries, IPoint, LegendForm, LegendHorizontalAlignment, LegendVerticalAlignment, ILineChart, XPosition, YPosition, Axis, XAxis, RightYAxis, LeftYAxis, LineChartCommon } from './line-chart.common';
 export { ILineSeries, IPoint, LegendForm, LegendHorizontalAlignment, LegendVerticalAlignment, ILineChart, XPosition, YPosition, Axis, XAxis, RightYAxis, LeftYAxis };
 export declare class LineChart extends LineChartCommon {
     private _android;
@@ -14,6 +14,6 @@ export declare class LineChart extends LineChartCommon {
     getXAxis(): any;
     getRightYAxis(): any;
     getLeftYAxis(): any;
-    private setChart();
-    private setYAxis(yAxisArgs, YAxis);
+    private setChart;
+    private setYAxis;
 }

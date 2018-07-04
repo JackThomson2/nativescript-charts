@@ -1,0 +1,13 @@
+android {
+    
+}
+
+allprojects {
+    repositories {
+        maven { url "https://jitpack.io" }
+    }
+}
+
+dependencies {
+    compile 'com.github.PhilJay:MPAndroidChart:v3.0.3@aar'
+}

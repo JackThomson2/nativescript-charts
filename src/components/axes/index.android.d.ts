@@ -1,13 +1,13 @@
 export declare enum YPosition {
     OUTSIDE_CHART,
-    INSIDE_CHART,
+    INSIDE_CHART
 }
 export declare enum XPosition {
     TOP,
     BOTTOM,
     BOTH_SIDED,
     TOP_INSIDE,
-    BOTTOM_INSIDE,
+    BOTTOM_INSIDE
 }
 export interface Axis {
     enabled?: boolean;

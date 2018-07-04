@@ -1,17 +1,17 @@
 export declare enum LegendHorizontalAlignment {
     LEFT,
     CENTER,
-    RIGHT,
+    RIGHT
 }
 export declare enum LegendVerticalAlignment {
     TOP,
     CENTER,
-    BOTTOM,
+    BOTTOM
 }
 export declare enum LegendForm {
     SQUARE,
     CIRCLE,
-    LINE,
+    LINE
 }
 export interface ILegend {
     enabled?: boolean;

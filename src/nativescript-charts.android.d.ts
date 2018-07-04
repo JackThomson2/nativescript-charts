@@ -1,4 +1,4 @@
-import { Common } from "./nativescript-charts.common";
+import { Common } from './nativescript-charts.common';
 export declare class NativescriptCharts extends Common {
     constructor();
 }

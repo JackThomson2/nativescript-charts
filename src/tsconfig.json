@@ -1,0 +1,30 @@
+{
+	"compilerOptions": {
+		"target": "es5",
+		"module": "commonjs",
+		"removeComments": true,
+		"noLib": false,
+		"emitDecoratorMetadata": true,
+		"experimentalDecorators": true,
+		"lib": ["es6", "dom"],
+		"sourceMap": true,
+		"pretty": true,
+		"allowUnreachableCode": false,
+		"allowUnusedLabels": false,
+		"noEmitHelpers": true,
+		"noEmitOnError": false,
+		"noImplicitAny": false,
+		"noImplicitReturns": true,
+		"noImplicitUseStrict": false,
+		"noFallthroughCasesInSwitch": true
+	},
+	"exclude": ["node_modules", "platforms"],
+	"files": [
+		"nativescript-charts.common.ts",
+		"nativescript-charts.android.ts",
+		"nativescript-charts.ios.ts",
+		"line-chart/line-chart.android.ts"
+	],
+	"compileOnSave": true,
+	"include": ["components/**/*", "line-chart/**/*"]
+}

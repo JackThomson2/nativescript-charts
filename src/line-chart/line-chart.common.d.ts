@@ -1,9 +1,11 @@
-import { ILegend, LegendHorizontalAlignment, LegendVerticalAlignment, LegendForm } from "../components/legend";
-import { XPosition, YPosition, Axis, XAxis, LeftYAxis, RightYAxis } from "../components/axes";
-import { BaseChartSettings } from "../components/chart";
-import { Dataset } from "../components/dataset";
-import { View } from "ui/core/view";
-import { Property } from "ui/core/dependency-observable";
+import { ILegend, LegendHorizontalAlignment, LegendVerticalAlignment, LegendForm } from '../components/legend';
+import { XPosition, YPosition, Axis, XAxis, LeftYAxis, RightYAxis } from '../components/axes';
+import { BaseChartSettings } from '../components/chart';
+import { Dataset } from '../components/dataset';
+import { View, Property } from 'tns-core-modules/ui/core/view';
+import { LineChart } from './line-chart.android';
+export declare const chartSettingsProperty: Property<LineChartCommon, LineChart>;
+export declare const chartDataProperty: Property<LineChartCommon, LineChart>;
 export { ILegend, LegendHorizontalAlignment, LegendVerticalAlignment, LegendForm };
 export { XPosition, YPosition, Axis, XAxis, LeftYAxis, RightYAxis };
 export interface ILineChart {
@@ -40,8 +42,8 @@ export interface ILineSeries extends Dataset {
 }
 export declare class LineChartCommon extends View {
     protected lineChartArgs: ILineChart;
-    static chartSettingsProperty: Property;
-    static chartDataProperty: Property;
+    static chartSettingsProperty: Property<LineChartCommon, LineChart>;
+    static chartDataProperty: Property<LineChartCommon, LineChart>;
     chartSettings: ILineChart;
     chartData: Array<ILineSeries>;
     constructor(lineChartArgs: ILineChart);
