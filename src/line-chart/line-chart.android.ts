@@ -41,7 +41,8 @@ var XAxisPosition = com.github.mikephil.charting.components.XAxis.XAxisPosition;
 
 //var Form=com.github.mikephil.charting.components.Legend.LegendForm;
 export class LineChart extends LineChartCommon {
-	private _graph: any;
+	public _graph: any;
+	public _context: any;
 
 	public createNativeView(): Object {
 		this._graph = new com.github.mikephil.charting.charts.LineChart(
@@ -51,12 +52,6 @@ export class LineChart extends LineChartCommon {
 		return this._graph;
 	}
 
-	//set chartSettings(value: ILineChart) {
-	//super();
-	//this._setValue(LineChartCommon.chartSettingsProperty, value);
-	//}
-
-	//how we create the UI of our View
 	public _createUI() {
 		this.setChart();
 	}
@@ -79,52 +74,36 @@ export class LineChart extends LineChartCommon {
 	}
 
 	public setChartSettings(lineChartArgs: ILineChart) {
-		this.lineChartArgs = lineChartArgs;
+		this.chartSettings = lineChartArgs;
 		this.setChart();
 		this._graph.notifyDataSetChanged();
 		this.invalidate();
 	}
 
-	public addLine(lineData: ILineSeries) {
-		var entries = new ArrayList();
-		lineData.lineData.forEach((point: IPoint) => {
-			entries.add(new Entry(point.x, point.y));
-		});
-		var dataset = new LineDataSet(entries, lineData.name);
-		this.setDataset(dataset, lineData);
-
-		if (
-			this._graph.getData() == null ||
-			this._graph.getData().getDataSetCount() == 0
-		) {
-			var lineDatasets = new ArrayList();
-			lineDatasets.add(dataset);
-			var lineDatas = new LineData(lineDatasets);
-			this._graph.setData(lineDatas);
-		} else {
-			this._graph.getData().addDataSet(dataset);
-		}
-		this._graph.getData().notifyDataChanged();
-		this._graph.notifyDataSetChanged();
-		this.invalidate();
-	}
-
-	public setChartData(chartData: Array<ILineSeries>) {
-		if (typeof chartData == 'undefined' || chartData.length == 0) return;
-		this.setChart();
-		var lineDatasets = new ArrayList();
-		chartData.forEach((lineSerie: ILineSeries) => {
+	protected onNewData() {
+		this._graph.clear();
+		if (typeof this.chartData == 'undefined') return;
+		let cntr = 0;
+		let graphData = this._graph.getData();
+		this.chartData.forEach((lineData: ILineSeries) => {
 			var entries = new ArrayList();
-			lineSerie.lineData.forEach((point: IPoint) => {
+			lineData.lineData.forEach((point: IPoint) => {
 				entries.add(new Entry(point.x, point.y));
 			});
-			var dataset = new LineDataSet(entries, lineSerie.name);
-			this.setDataset(dataset, lineSerie);
-			lineDatasets.add(dataset);
+			var dataset = new LineDataSet(entries, lineData.name);
+			this.setDataset(dataset, lineData);
+			if (cntr == 0) {
+				var lineDatasets = new ArrayList();
+				lineDatasets.add(dataset);
+				var lineDatas = new LineData(lineDatasets);
+				this._graph.setData(lineDatas);
+				graphData = this._graph.getData();
+			} else {
+				graphData.addDataSet(dataset);
+			}
+			cntr++;
 		});
-		var lineDatas = new LineData(lineDatasets);
-		this._graph.setData(lineDatas);
-		this._graph.getData().notifyDataChanged();
+		console.log(this._graph.getData());
 		this._graph.notifyDataSetChanged();
 		this.invalidate();
 	}
@@ -139,82 +118,13 @@ export class LineChart extends LineChartCommon {
 		return this._graph.getAxisLeft();
 	}
 
-	/*private setDataset(lineData,dataset){
-        dataset.setColor(resolveColor(lineData.color));
-        if('valueTextColor' in lineData){
-            dataset.setValueTextColor(resolveColor(lineData.valueTextColor));
-        }
-        if('valueTextColors' in lineData){
-            var colors = new ArrayList();
-            lineData.valueTextColors.forEach((item)=>{
-                colors.add(new java.lang.Integer(resolveColor(item)));
-            });
-            dataset.setValueTextColors(colors);
-            colors=null;
-        }
-        if('valueTextSize' in lineData){
-            dataset.setValueTextSize(lineData.valueTextSize);
-        }
-        if('drawValues' in lineData){
-            dataset.setDrawValues(lineData.drawValues);
-        }
-        if('highlightEnabled' in lineData){
-            dataset.setHighlightEnabled(lineData.highlightEnabled);
-        }
-        if('drawVerticalHighlightIndicator' in lineData){
-            dataset.setDrawVerticalHighlightIndicator(lineData.drawVerticalHighlightIndicator);
-        }
-        if('drawHorizontalHighlightIndicator' in lineData){
-            dataset.setDrawHorizontalHighlightIndicator(lineData.drawHorizontalHighlightIndicator);
-        }
-        if('highLightColor' in lineData){
-            dataset.setHighLightColor(resolveColor(lineData.highLightColor));
-        }
-        if('drawHighlightIndicators' in lineData){
-            dataset.setDrawHighlightIndicators(lineData.drawHighlightIndicators);
-        }
-        if('highlightLineWidth' in lineData){
-            dataset.setHighlightLineWidth(lineData.highlightLineWidth);
-        }
-        if('fillColor' in lineData){
-            dataset.setFillColor(resolveColor(lineData.fillColor));
-        }
-        if('fillAlpha' in lineData){
-            if(lineData.fillAlpha <= 255 && lineData.fillAlpha >= 0){
-                dataset.setFillAlpha(lineData.fillAlpha);
-            }
-        }
-        if('drawFilled' in lineData){
-            dataset.setDrawFilled(lineData.drawFilled);
-        }
-        if('lineWidth' in lineData){
-            dataset.setLineWidth(lineData.lineWidth);
-        }
-        if('circleRadius' in lineData){
-            dataset.setCircleRadius(lineData.circleRadius);
-        }
-        if('circleColor' in lineData){
-            dataset.setCircleColor(resolveColor(lineData.circleColor));
-        }
-        if('circleColorHole' in lineData){
-            dataset.setCircleColorHole(resolveColor(lineData.circleColorHole));
-        }
-        if('drawCircleHole' in lineData){
-            dataset.setDrawCircleHole(lineData.drawCircleHole);
-        }
-        if('enableDashedLine' in lineData){
-            dataset.enableDashedLine(lineData.enableDashedLine.lineLength, lineData.enableDashedLine.spaceLength, lineData.enableDashedLine.phase);
-        }
-
-    }*/
-
-	private setChart() {
-		if (typeof this.lineChartArgs == 'undefined') {
+	protected setChart() {
+		if (typeof this.chartSettings == 'undefined') {
 			return;
 		}
-		if ('BaseSettings' in this.lineChartArgs) {
+		if ('BaseSettings' in this.chartSettings) {
 			let chart = this._graph;
-			let baseSettings = this.lineChartArgs.BaseSettings;
+			let baseSettings = this.chartSettings.BaseSettings;
 			if ('backgroundColor' in baseSettings) {
 				chart.setBackgroundColor(resolveColor(baseSettings.backgroundColor));
 			}
@@ -276,9 +186,9 @@ export class LineChart extends LineChartCommon {
 					chart.setMaxVisibleValueCount(baseSettings.maxVisibleValueCount);
 			}
 		}
-		if ('Legend' in this.lineChartArgs) {
+		if ('Legend' in this.chartSettings) {
 			let legend = this._graph.getLegend();
-			let legendArgs = this.lineChartArgs.Legend;
+			let legendArgs = this.chartSettings.Legend;
 			if ('enabled' in legendArgs) {
 				if (typeof legendArgs.enabled == 'boolean')
 					legend.setEnabled(legendArgs.enabled);
@@ -297,8 +207,8 @@ export class LineChart extends LineChartCommon {
 				legend.setForm(Legend.LegendForm.valueOf(legendArgs.form));
 			}
 		}
-		if ('XAxis' in this.lineChartArgs) {
-			let xAxisArgs = this.lineChartArgs.XAxis;
+		if ('XAxis' in this.chartSettings) {
+			let xAxisArgs = this.chartSettings.XAxis;
 			let XAxis = this._graph.getXAxis();
 			if ('enabled' in xAxisArgs) {
 				if (typeof xAxisArgs.enabled == 'boolean')
@@ -389,17 +299,21 @@ export class LineChart extends LineChartCommon {
 				XAxis.setLabelRotationAngle(xAxisArgs.labelRotationAngle);
 			}
 		}
-		if ('RightYAxis' in this.lineChartArgs) {
-			let yAxisArgs = this.lineChartArgs.RightYAxis;
+		if ('RightYAxis' in this.chartSettings) {
+			let yAxisArgs = this.chartSettings.RightYAxis;
 			let YAxis = this._graph.getAxisRight();
 			this.setYAxis(yAxisArgs, YAxis);
 		}
-		if ('LeftYAxis' in this.lineChartArgs) {
-			let yAxisArgs = this.lineChartArgs.LeftYAxis;
+		if ('LeftYAxis' in this.chartSettings) {
+			let yAxisArgs = this.chartSettings.LeftYAxis;
 			let YAxis = this._graph.getAxisLeft();
 			this.setYAxis(yAxisArgs, YAxis);
 		}
+
+		this._graph.notifyDataSetChanged();
+		this.invalidate();
 	}
+
 	private setYAxis(yAxisArgs, YAxis) {
 		if ('enabled' in yAxisArgs) {
 			if (typeof yAxisArgs.enabled == 'boolean')
@@ -498,5 +412,4 @@ export class LineChart extends LineChartCommon {
 			YAxis.setZeroLineColor(resolveColor(yAxisArgs.zeroLineColor));
 		}
 	}
-	//}
 }

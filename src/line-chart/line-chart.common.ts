@@ -16,17 +16,8 @@ import { BaseChartSettings } from '../components/chart';
 import { Dataset } from '../components/dataset';
 import { resolveColor } from '../helper';
 import { View, Property } from 'tns-core-modules/ui/core/view';
-import { LineChart } from './line-chart.android';
 
 declare const java: any;
-
-export const chartSettingsProperty = new Property<LineChartCommon, LineChart>({
-	name: 'settings'
-});
-export const chartDataProperty = new Property<LineChartCommon, Array<IPoint>>({
-	name: 'data',
-	affectsLayout: true
-});
 
 export {
 	ILegend,
@@ -71,23 +62,44 @@ export interface ILineSeries extends Dataset {
 	};
 }
 
+export const chartSettingsProperty = new Property<LineChartCommon, ILineChart>({
+	name: 'chartSettings'
+});
+
+export const chartDataProperty = new Property<
+	LineChartCommon,
+	Array<ILineSeries>
+>({
+	name: 'chartData'
+});
+
 var ArrayList = java.util.ArrayList;
 
-export class LineChartCommon extends View {
-	public static chartSettingsProperty = chartSettingsProperty;
-	public static chartDataProperty = chartDataProperty;
+export abstract class LineChartCommon extends View {
+	protected config: any = {};
 
-	get chartSettings(): ILineChart {
-		return this._getValue(LineChartCommon.chartSettingsProperty);
+	public chartData: Array<ILineSeries> = undefined;
+	public chartSettings: ILineChart = undefined;
+
+	[chartSettingsProperty.setNative](value: ILineChart) {
+		console.log('Settings set');
+		this.chartSettings = value;
+		this.setChart();
 	}
 
-	get chartData(): Array<ILineSeries> {
-		return this._getValue(LineChartCommon.chartDataProperty);
+	[chartDataProperty.setNative](value: Array<ILineSeries>) {
+		console.log('Data set');
+		this.chartData = value;
+		this.onNewData();
 	}
 
 	constructor(protected lineChartArgs: ILineChart) {
 		super();
 	}
+
+	protected abstract onNewData(): void;
+	protected abstract setChart(): void;
+
 	protected resolveColor(color) {
 		return resolveColor(color);
 	}
@@ -183,3 +195,6 @@ export class LineChartCommon extends View {
 		}
 	}
 }
+
+chartSettingsProperty.register(LineChartCommon);
+chartDataProperty.register(LineChartCommon);

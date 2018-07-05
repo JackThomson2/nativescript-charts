@@ -20,13 +20,28 @@ declare var com: any;
 declare var java: any;
 declare var Array: any;
 
+var points = [
+	{ x: 1, y: 4 },
+	{ x: 3, y: 5.9 },
+	{ x: 7, y: 4 },
+	{ x: 8, y: 10 },
+	{ x: 10, y: 1 }
+];
+
+var lineData: ILineSeries = {
+	lineData: points,
+	color: 'green',
+	name: 'test'
+};
+
 var line: LineChart;
 var graph1: LineChart;
 var i = 0;
 var obj = observable.fromObjectRecursive({
 	chartSettings: {},
-	chartData: {}
+	chartData: [lineData]
 });
+
 var boolValue = true;
 export function pageLoaded(args: observable.EventData) {
 	// Get the event sender
@@ -84,7 +99,6 @@ export function pageLoaded(args: observable.EventData) {
 	//console.log(3)
 	StackLayout.addChild(line);
 	//console.log(4)
-	var chartData = [];
 
 	/*var points  = [
         {x:-25,y:0},
@@ -95,6 +109,8 @@ export function pageLoaded(args: observable.EventData) {
         color:"green",
         name:"test"
     };*/
+	var chartData = [];
+
 	chartData.push(addData({ x: -30, y: 0 }, { x: -30, y: 0 }, true));
 	chartData.push(addData({ x: 30, y: 0 }, { x: 30, y: 0 }, true));
 	chartData.push(addData({ x: -5, y: 0 }, { x: -5, y: 20 }));
@@ -121,9 +137,8 @@ export function pageLoaded(args: observable.EventData) {
 	var chartData2 = [];
 	var counter = chartData.length;
 	var c = 0;
-	line.setChartSettings(linechartOpts);
-	line.setChartData(chartData);
-	line.setChartSettings(linechartOpts);
+	line.chartData = chartData;
+	line.chartSettings = linechartOpts;
 	/*var timer=setInterval(()=>{
             chartData2.push(chartData[c]);
             
@@ -165,13 +180,11 @@ export function pageLoaded(args: observable.EventData) {
 }
 
 export function addLine(args: observable.EventData) {
-	var points2 = [
-		{ x: 1, y: Math.random() * 100 - 49 },
-		{ x: 3, y: Math.random() * 100 - 49 },
-		{ x: 7, y: Math.random() * 100 - 19 },
-		{ x: 8, y: Math.random() * 100 - 79 },
-		{ x: 10, y: Math.random() * 100 - 59 }
-	];
+	let toAdd = Math.random() * 20000 + 1;
+	var points2 = [];
+	for (let i = 1; i < toAdd; i++) {
+		points2.push({ x: i, y: Math.random() * 100 - 49 });
+	}
 	var color = Math.floor(Math.random() * 16777215 - 16777216);
 	var textColors = [
 		Math.floor(Math.random() * 16777215 - 16777216),
@@ -190,37 +203,42 @@ export function addLine(args: observable.EventData) {
 		circleRadius: 4
 	};
 	i++;
-	graph1.addLine(lineData2);
+	//graph1.addLine(lineData2);
+	let charts = obj.get('chartData');
+	charts.push(lineData2);
+
+	obj.set('chartData', [...charts]);
+	//graph1.updateData();
 }
 
 export function clearData(args: observable.EventData) {
-	line.clearData();
-	graph1.clearData();
+	//line.clearData();
+	obj.set('chartData', []);
 }
 export function clearGraph(args: observable.EventData) {
-	line.clear();
-	graph1.clear();
+	//line.clear();
+	obj.set('chartData', []);
 }
 
 export function editSettings(args: observable.EventData) {
 	let page = <pages.Page>args.object;
 	boolValue = !boolValue;
 	//obj.
-	var linechartOpts: any = observable.fromObjectRecursive({
+	var linechartOpts: ILineChart = {
 		Legend: {
 			enabled: boolValue
 		},
 		XAxis: {
-			textSize: Math.random() * 10 + 1,
+			textSize: Math.random() * 20 + 1,
 			textColor: Math.floor(Math.random() * 16777215 - 16777216),
 			position: XPosition.BOTTOM
 		},
 		RightYAxis: {
-			textSize: Math.random() * 10 + 1,
+			textSize: Math.random() * 20 + 1,
 			textColor: Math.floor(Math.random() * 16777215 - 16777216)
 		},
 		LeftYAxis: {
-			textSize: Math.random() * 10 + 1,
+			textSize: Math.random() * 20 + 1,
 			textColor: Math.floor(Math.random() * 16777215 - 16777216)
 		},
 		BaseSettings: {
@@ -229,7 +247,7 @@ export function editSettings(args: observable.EventData) {
 			description: 'POMOOOOOOOOOOOOOOOOOC',
 			noDataText: 'Nemame data'
 		}
-	});
+	};
 	obj.set('chartSettings', linechartOpts);
 }
 
