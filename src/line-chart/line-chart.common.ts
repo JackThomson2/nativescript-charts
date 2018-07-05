@@ -82,13 +82,11 @@ export abstract class LineChartCommon extends View {
 	public chartSettings: ILineChart = undefined;
 
 	[chartSettingsProperty.setNative](value: ILineChart) {
-		console.log('Settings set');
 		this.chartSettings = value;
 		this.setChart();
 	}
 
 	[chartDataProperty.setNative](value: Array<ILineSeries>) {
-		console.log('Data set');
 		this.chartData = value;
 		this.onNewData();
 	}

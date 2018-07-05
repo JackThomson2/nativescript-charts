@@ -103,7 +103,6 @@ export class LineChart extends LineChartCommon {
 			}
 			cntr++;
 		});
-		console.log(this._graph.getData());
 		this._graph.notifyDataSetChanged();
 		this.invalidate();
 	}
