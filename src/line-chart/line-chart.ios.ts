@@ -52,6 +52,52 @@ export class LineChart extends LineChartCommon {
 		this.XAxisPosition = YAxisLabelPosition;
 	}
 
+	public invalidate() {
+		//this._graph.invalidate();
+	}
+
+	public clear() {
+		this._graph.clear();
+		this._graph.notifyDataSetChanged();
+		this.setChart();
+	}
+
+	public clearData() {
+		let datum = this.getGraphData();
+		if (datum) {
+			datum.clearValues();
+			this._graph.notifyDataSetChanged();
+			this.invalidate();
+		}
+	}
+
+	public setChartSettings(lineChartArgs: ILineChart) {
+		this.chartSettings = lineChartArgs;
+		this.setChart();
+		this._graph.notifyDataSetChanged();
+		this.invalidate();
+	}
+
+	protected onNewData() {
+		this._graph.clear();
+		if (typeof this.chartData == 'undefined') return;
+
+		var lineDatas = new this.LineData();
+		this.chartData.forEach((lineData: ILineSeries) => {
+			var entries = new this.ArrayList();
+			lineData.lineData.forEach((point: IPoint) => {
+				entries.addObject(new this.Entry(point.x, point.y));
+			});
+			var dataset = new this.LineDataSet(entries, lineData.name);
+			this.setDataset(dataset, lineData);
+			lineDatas.addDataSet(dataset);
+		});
+
+		this._graph.data = lineDatas;
+		this._graph.notifyDataSetChanged();
+		this.invalidate();
+	}
+
 	protected getGraphData() {
 		return this._graph.data;
 	}
@@ -441,53 +487,6 @@ export class LineChart extends LineChartCommon {
 		if ('zeroLineColor' in yAxisArgs) {
 			YAxis.zeroLineColor = resolveColor(yAxisArgs.zeroLineColor);
 		}
-	}
-
-	public invalidate() {
-		//this._graph.invalidate();
-	}
-
-	public clear() {
-		this._graph.clear();
-		this._graph.notifyDataSetChanged();
-		this.setChart();
-	}
-
-	public clearData() {
-		let datum = this.getGraphData();
-		if (datum) {
-			datum.clearValues();
-			this._graph.notifyDataSetChanged();
-			this.invalidate();
-		}
-	}
-
-	public setChartSettings(lineChartArgs: ILineChart) {
-		this.chartSettings = lineChartArgs;
-		this.setChart();
-		this._graph.notifyDataSetChanged();
-		this.invalidate();
-	}
-
-	protected onNewData() {
-		this._graph.clear();
-		if (typeof this.chartData == 'undefined') return;
-
-		var lineDatas = new this.LineData();
-		this.chartData.forEach((lineData: ILineSeries) => {
-			var entries = new this.ArrayList();
-			lineData.lineData.forEach((point: IPoint) => {
-				entries.addObject(new this.Entry(point.x, point.y));
-			});
-			var dataset = new this.LineDataSet(entries, lineData.name);
-			this.setDataset(dataset, lineData);
-			lineDatas.addDataSet(dataset);
-			//lineDatas.dataSets.append(lineDatas);
-		});
-
-		this._graph.data = lineDatas;
-		this._graph.notifyDataSetChanged();
-		this.invalidate();
 	}
 
 	public getXAxis() {
