@@ -1,21 +1,21 @@
 declare var com;
 //let cLegend = com.github.mikephil.charting.components.Legends;
 
+declare const NSObject: any;
+
+declare class YAxisLabelPosition extends NSObject {}
+declare class XAxisLabelPosition extends NSObject {}
+
 export enum YPosition {
-	OUTSIDE_CHART = com.github.mikephil.charting.components.YAxis
-		.YAxisLabelPosition.OUTSIDE_CHART,
-	INSIDE_CHART = com.github.mikephil.charting.components.YAxis
-		.YAxisLabelPosition.INSIDE_CHART
+	OUTSIDE_CHART = YAxisLabelPosition.outsideChart,
+	INSIDE_CHART = YAxisLabelPosition.insideChart
 }
 export enum XPosition {
-	TOP = com.github.mikephil.charting.components.XAxis.XAxisPosition.TOP,
-	BOTTOM = com.github.mikephil.charting.components.XAxis.XAxisPosition.BOTTOM,
-	BOTH_SIDED = com.github.mikephil.charting.components.XAxis.XAxisPosition
-		.BOTH_SIDED,
-	TOP_INSIDE = com.github.mikephil.charting.components.XAxis.XAxisPosition
-		.TOP_INSIDE,
-	BOTTOM_INSIDE = com.github.mikephil.charting.components.XAxis.XAxisPosition
-		.BOTTOM_INSIDE
+	TOP = XAxisLabelPosition.top,
+	BOTTOM = XAxisLabelPosition.bottom,
+	BOTH_SIDED = XAxisLabelPosition.bothSided,
+	TOP_INSIDE = XAxisLabelPosition.topInside,
+	BOTTOM_INSIDE = XAxisLabelPosition.bottomInside
 }
 /*export enum YSide{
     LEFT,
@@ -57,8 +57,8 @@ export interface IYAxis extends Axis {
 	spaceTop?: number;
 	spaceBottom?: number;
 }
-export interface IRightYAxis extends IYAxis {}
-export interface ILeftYAxis extends IYAxis {}
+export interface RightYAxis extends IYAxis {}
+export interface LeftYAxis extends IYAxis {}
 
 export interface IXAxis extends Axis {
 	position?: XPosition;
